@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOD Mid-Sem Marks Review</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+      }
+      body {
+        background: #e9ecef;
+        color: #333;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4a4a4a;
+      }
+      .dropdown-container {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f9f9f9;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      .marks-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      .marks-table th,
+      .marks-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      .marks-table th {
+        background-color: #4caf50;
+        color: white;
+      }
+      .marks-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>HOD Mid-Sem Marks Review</h1>
+
+      <!-- Year and Branch Selection -->
+      <div class="dropdown-container">
+        <label for="yearSelect"><strong>Select Year:</strong></label>
+        <select id="yearSelect">
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+        
+        <label for="branchSelect"><strong>Select Branch:</strong></label>
+        <select id="branchSelect">
+          <option value="CS">Computer Science</option>
+          <option value="IT">Information Technology</option>
+          <option value="EC">Electronics & Communications</option>
+          <option value="AU">Automobile Engineering</option>
+          <option value="EE">Electrical Engineering</option>
+          <option value="ME">Mechanical Engineering</option>
+        </select>
+        
+        <button onclick="showMarks()">Show Marks</button>
+      </div>
+
+      <!-- Marks Table -->
+      <div id="marksTableContainer" style="display: none;">
+        <h2>Mid-Semester Marks</h2>
+        <table class="marks-table" id="marksTable">
+          <thead>
+            <tr>
+              <th>Enrollment ID</th>
+              <th>Student Name</th>
+              <th>Marks</th>
+            </tr>
+          </thead>
+          <tbody id="marksTableBody">
+            <!-- Table rows will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      // Dummy data for students' marks
+      const studentMarks = {
+        1: {
+          CS: [
+            { id: "0902CS241001", name: "Student 1", marks: 75 },
+            { id: "0902CS241002", name: "Student 2", marks: 85 },
+            // Add more students as needed
+          ],
+          IT: [
+            { id: "0902IT241001", name: "Student 3", marks: 78 },
+            { id: "0902IT241002", name: "Student 4", marks: 82 },
+          ],
+        },
+        2: {
+          CS: [
+            { id: "0902CS231001", name: "Student 5", marks: 90 },
+            { id: "0902CS231002", name: "Student 6", marks: 88 },
+          ],
+          IT: [
+            { id: "0902IT231001", name: "Student 7", marks: 79 },
+            { id: "0902IT231002", name: "Student 8", marks: 84 },
+          ],
+        },
+        3: {
+          CS: [
+            { id: "0902CS221001", name: "Student 9", marks: 70 },
+            { id: "0902CS221002", name: "Student 10", marks: 68 },
+          ],
+          IT: [
+            { id: "0902IT221001", name: "Student 11", marks: 72 },
+            { id: "0902IT221002", name: "Student 12", marks: 76 },
+          ],
+        },
+        4: {
+          CS: [
+            { id: "0902CS211001", name: "Student 13", marks: 80 },
+            { id: "0902CS211002", name: "Student 14", marks: 78 },
+          ],
+          IT: [
+            { id: "0902IT211001", name: "Student 15", marks: 73 },
+            { id: "0902IT211002", name: "Student 16", marks: 85 },
+          ],
+        },
+      };
+
+      function showMarks() {
+        const year = document.getElementById("yearSelect").value;
+        const branch = document.getElementById("branchSelect").value;
+        const tableBody = document.getElementById("marksTableBody");
+        const tableContainer = document.getElementById("marksTableContainer");
+
+        tableBody.innerHTML = ""; // Clear previous data
+
+        if (studentMarks[year] && studentMarks[year][branch]) {
+          const students = studentMarks[year][branch];
+          students.forEach(student => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${student.id}</td>
+              <td>${student.name}</td>
+              <td>${student.marks}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+          tableContainer.style.display = "block";
+        } else {
+          alert("No data found for the selected year and branch.");
+          tableContainer.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>

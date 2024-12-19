@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOD Attendance Review</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+      }
+      body {
+        background: #f0f4f8;
+        color: #333;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #4a4a4a;
+      }
+      .dropdown-container,
+      .student-search-container {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      select,
+      input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f9f9f9;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button {
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .chart-section {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .pie-chart-container {
+        width: 100%;
+        max-width: 500px;
+        margin: auto;
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      canvas {
+        max-width: 100%;
+        height: auto;
+      }
+      .student-attendance {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fafafa;
+        display: none;
+      }
+      .student-attendance h3 {
+        margin-bottom: 10px;
+      }
+      .student-attendance p {
+        font-size: 18px;
+        line-height: 1.5;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>HOD Attendance Review</h1>
+
+      <!-- Year and Branch Selection -->
+      <div class="dropdown-container">
+        <label for="yearSelect"><strong>Select Year:</strong></label>
+        <select id="yearSelect">
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+
+        <label for="branchSelect"><strong>Select Branch:</strong></label>
+        <select id="branchSelect">
+          <option value="CS">Computer Science</option>
+          <option value="IT">Information Technology</option>
+          <option value="EC">Electronics & Communications</option>
+          <option value="AU">Automobile Engineering</option>
+          <option value="EE">Electrical Engineering</option>
+          <option value="ME">Mechanical Engineering</option>
+        </select>
+      </div>
+
+      <!-- Chart Section -->
+      <div class="chart-section">
+        <div class="pie-chart-container">
+          <h3 id="chartTitle">Attendance Overview - 1st Year - Computer Science</h3>
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Student Search Section -->
+      <div class="student-search-container">
+        <label for="studentId"><strong>Enter Enrollment ID:</strong></label>
+        <input type="text" id="studentId" placeholder="e.g., 0902CS221001" />
+        <button id="searchStudent">View Attendance</button>
+      </div>
+
+      <div class="student-attendance" id="studentAttendance">
+        <h3>Student Attendance Details</h3>
+        <p id="studentDetails"></p>
+      </div>
+    </div>
+
+    <script>
+      // Dummy attendance data for charts
+      const attendanceData = {
+        CS: {
+          1: { present: 85, absent: 15 },
+          2: { present: 78, absent: 22 },
+          3: { present: 88, absent: 12 },
+          4: { present: 82, absent: 18 },
+        },
+        IT: {
+          1: { present: 90, absent: 10 },
+          2: { present: 80, absent: 20 },
+          3: { present: 85, absent: 15 },
+          4: { present: 83, absent: 17 },
+        },
+        EC: {
+            1: { present: 70, absent: 10 },
+            2: { present: 60, absent: 20 },
+            3: { present: 65, absent: 15 },
+            4: { present: 43, absent: 17 },
+        },
+        ME: {
+            1: { present: 40, absent: 10 },
+            2: { present: 50, absent: 20 },
+            3: { present: 65, absent: 15 },
+            4: { present: 73, absent: 17 },
+        },
+        AU: {
+            1: { present: 70, absent: 10 },
+            2: { present: 60, absent: 20 },
+            3: { present: 55, absent: 15 },
+            4: { present: 43, absent: 17 },
+        },
+        EE: {
+            1: { present: 90, absent: 10 },
+            2: { present: 60, absent: 20 },
+            3: { present: 55, absent: 15 },
+            4: { present: 63, absent: 17 },
+        },
+      };
+
+      // Dummy student data
+      const studentData = {
+        CS: {
+          1: [
+            { id: "0902CS241001", name: "John Doe", present: 45, absent: 5 },
+            { id: "0902CS241002", name: "Jane Smith", present: 42, absent: 8 },
+          ],
+          2: [
+            { id: "0902CS231001", name: "Alice Johnson", present: 48, absent: 2 },
+          ],
+          3: [
+          { id: '0902CS221001', name: 'Abhay Pratap', present: 36, absent: 14 },
+          { id: '0902CS221002', name: 'Abhishek Chaurasiya', present: 8, absent: 42 },
+          { id: '0902CS221003', name: 'Abhishek Sharma', present: 22, absent: 28 },
+          { id: '0902CS221004', name: 'Abhishek Bhadoriya', present: 37, absent: 13 },
+          { id: '0902CS221005', name: 'Adarsh Kumar Singh', present: 43, absent: 7 },
+          { id: '0902CS221006', name: 'Akshat Vajpai', present: 25, absent: 25 },
+          { id: '0902CS221007', name: 'Amardeep Yadav', present: 48, absent: 2 },
+          { id: '0902CS221008', name: 'Amit Kumar', present: 47, absent: 3 },
+          { id: '0902CS221009', name: 'Amrit Kumar', present: 3, absent: 47 },
+          { id: '0902CS221010', name: 'Aniket Dandotiya', present: 20, absent: 30 },
+          { id: '0902CS221011', name: 'Ankit Singh', present: 35, absent: 15 },
+          { id: '0902CS221012', name: 'Ankita Soni', present: 6, absent: 44 },
+          { id: '0902CS221013', name: 'Ankush Siwach', present: 21, absent: 29 },
+          { id: '0902CS221014', name: 'Anshuman Mishra', present: 7, absent: 43 },
+          { id: '0902CS221015', name: 'Anurag Kumar', present: 34, absent: 16 },
+          { id: '0902CS221016', name: 'Ashray Kumar', present: 14, absent: 36 },
+          { id: '0902CS221017', name: 'Ashta Tomar', present: 10, absent: 40 },
+          { id: '0902CS221018', name: 'Ayush Katiyar', present: 42, absent: 8 },
+          { id: '0902CS221019', name: 'Ayush Singh Bhadoriya', present: 13, absent: 37 },
+          { id: '0902CS221020', name: 'No Student', present: 0, absent: 0 },
+          { id: '0902CS221021', name: 'Dev Poonia', present: 28, absent: 22 },
+          { id: '0902CS221022', name: 'Deepti Shrivas', present: 41, absent: 9 },
+          { id: '0902CS221023', name: 'Dhruv Sharma', present: 20, absent: 30 },
+          { id: '0902CS221024', name: 'Student 24', present: 36, absent: 14 },
+          { id: '0902CS221025', name: 'Ekam Soni', present: 28, absent: 22 },
+          { id: '0902CS221026', name: 'Student 26', present: 32, absent: 18 },
+          { id: '0902CS221027', name: 'Leelesh Solanki', present: 18, absent: 32 },
+          { id: '0902CS221028', name: 'KM Lalita', present: 24, absent: 26 },
+          { id: '0902CS221029', name: 'Nakul Yadav', present: 49, absent: 1 },
+          { id: '0902CS221030', name: 'Nancy Kushwaha', present: 42, absent: 8 },
+          { id: '0902CS221031', name: 'Student 31', present: 7, absent: 43 },
+          { id: '0902CS221032', name: 'Student 32', present: 1, absent: 49 },
+          { id: '0902CS221033', name: 'Pradeep Kumar Maurya', present: 20, absent: 30 },
+          { id: '0902CS221034', name: 'Student 34', present: 17, absent: 33 },
+          { id: '0902CS221035', name: 'Praveen Kumar', present: 32, absent: 18 },
+          { id: '0902CS221036', name: 'Prem Prakash', present: 24, absent: 26 },
+          { id: '0902CS221037', name: 'Priya Singh', present: 36, absent: 14 },
+          { id: '0902CS221038', name: 'Priya Yadav', present: 41, absent: 9 },
+          { id: '0902CS221039', name: 'Priyanshu Chaurasiya', present: 27, absent: 23 },
+          { id: '0902CS221040', name: 'Student 40', present: 24, absent: 26 },
+          { id: '0902CS221041', name: 'Student 41', present: 45, absent: 5 },
+          { id: '0902CS221042', name: 'Student 42', present: 2, absent: 48 },
+          { id: '0902CS221043', name: 'Student 43', present: 31, absent: 19 },
+          { id: '0902CS221044', name: 'Student 44', present: 38, absent: 12 },
+          { id: '0902CS221045', name: 'Student 45', present: 46, absent: 4 },
+          { id: '0902CS221046', name: 'Student 46', present: 50, absent: 0 },
+          { id: '0902CS221047', name: 'Student 47', present: 44, absent: 6 },
+          { id: '0902CS221048', name: 'Student 48', present: 18, absent: 32 },
+          { id: '0902CS221049', name: 'Student 49', present: 34, absent: 16 },
+          { id: '0902CS221050', name: 'Student 50', present: 10, absent: 40 },
+          { id: '0902CS221051', name: 'Student 51', present: 33, absent: 17 },
+          { id: '0902CS221052', name: 'Student 52', present: 14, absent: 36 },
+          { id: '0902CS221053', name: 'Student 53', present: 41, absent: 9 },
+          { id: '0902CS221054', name: 'Student 54', present: 25, absent: 25 },
+          { id: '0902CS221055', name: 'Student 55', present: 41, absent: 9 },
+          { id: '0902CS221056', name: 'Student 56', present: 44, absent: 6 },
+          { id: '0902CS221057', name: 'Student 57', present: 33, absent: 17 },
+          { id: '0902CS221058', name: 'Student 58', present: 23, absent: 27 },
+          { id: '0902CS221059', name: 'Student 59', present: 39, absent: 11 },
+          { id: '0902CS221060', name: 'Student 60', present: 26, absent: 24 },
+          { id: '0902CS221061', name: 'Student 61', present: 37, absent: 13 },
+          { id: '0902CS221062', name: 'Student 62', present: 35, absent: 15 },
+          { id: '0902CS221063', name: 'Student 63', present: 4, absent: 46 },
+          { id: '0902CS221064', name: 'Student 64', present: 26, absent: 24 },
+          { id: '0902CS221065', name: 'Student 65', present: 21, absent: 29 },
+          { id: '0902CS221066', name: 'Student 66', present: 38, absent: 12 },
+          { id: '0902CS221067', name: 'Student 67', present: 45, absent: 5 },
+          { id: '0902CS221068', name: 'Student 68', present: 2, absent: 48 },
+          { id: '0902CS221069', name: 'Student 69', present: 9, absent: 41 },
+          { id: '0902CS221070', name: 'Student 70', present: 44, absent: 6 },
+          { id: '0902CS221071', name: 'Student 71', present: 20, absent: 30 },
+          { id: '0902CS221072', name: 'Student 72', present: 47, absent: 3 }
+
+          ],
+          4: [
+            { id: "0902CS211001", name: "Charlie Brown", present: 38, absent: 12 },
+          ],
+        },
+        IT: {
+          1: [
+            { id: "0902IT241001", name: "Megan Doe", present: 46, absent: 4 },
+          ],
+          2: [
+            { id: "0902IT231001", name: "James Smith", present: 43, absent: 7 },
+          ],
+          3: [
+            { id: "0902IT221001", name: "Bob Martin", present: 40, absent: 10 },
+          ],
+          4: [
+            { id: "0902IT211001", name: "Charlie Brown", present: 38, absent: 12 },
+          ],
+        },
+        EC: {
+            1: [
+              { id: "0902EC241001", name: "Megan Doe", present: 46, absent: 4 },
+            ],
+            2: [
+              { id: "0902EC231001", name: "James Smith", present: 43, absent: 7 },
+            ],
+            3: [
+              { id: "0902EC221001", name: "Bob Martin", present: 40, absent: 10 },
+            ],
+            4: [
+              { id: "0902EC211001", name: "Charlie Brown", present: 38, absent: 12 },
+            ],
+        },
+        ME: {
+            1: [
+              { id: "0902ME241001", name: "Megan Doe", present: 46, absent: 4 },
+            ],
+            2: [
+              { id: "0902ME231001", name: "James Smith", present: 43, absent: 7 },
+            ],
+            3: [
+              { id: "0902ME221001", name: "Bob Martin", present: 40, absent: 10 },
+            ],
+            4: [
+              { id: "0902ME211001", name: "Charlie Brown", present: 38, absent: 12 },
+            ],
+        },
+        EE: {
+            1: [
+              { id: "0902EE241001", name: "Megan Doe", present: 46, absent: 4 },
+            ],
+            2: [
+              { id: "0902EE231001", name: "James Smith", present: 43, absent: 7 },
+            ],
+            3: [
+              { id: "0902EE221001", name: "Bob Martin", present: 40, absent: 10 },
+            ],
+            4: [
+              { id: "0902EE211001", name: "Charlie Brown", present: 38, absent: 12 },
+            ],
+        },
+        AU: {
+            1: [
+              { id: "0902AU241001", name: "Megan Doe", present: 46, absent: 4 },
+            ],
+            2: [
+              { id: "0902AU231001", name: "James Smith", present: 43, absent: 7 },
+            ],
+            3: [
+              { id: "0902AU221001", name: "Bob Martin", present: 40, absent: 10 },
+            ],
+            4: [
+              { id: "0902AU211001", name: "Charlie Brown", present: 38, absent: 12 },
+            ],
+        },
+      };
+
+      const yearSelect = document.getElementById("yearSelect");
+      const branchSelect = document.getElementById("branchSelect");
+      const chartTitle = document.getElementById("chartTitle");
+      const pieCtx = document.getElementById("pieChart").getContext("2d");
+
+      const studentIdInput = document.getElementById("studentId");
+      const searchStudentBtn = document.getElementById("searchStudent");
+      const studentAttendanceSection = document.getElementById("studentAttendance");
+      const studentDetails = document.getElementById("studentDetails");
+
+      // Initialize pie chart
+      let pieChart = new Chart(pieCtx, {
+        type: "pie",
+        data: {
+          labels: ["Present", "Absent"],
+          datasets: [
+            {
+              data: [85, 15],
+              backgroundColor: ["#4caf50", "#f44336"],
+            },
+          ],
+        },
+      });
+
+      // Update chart based on year and branch
+      function updateChart() {
+        const selectedYear = yearSelect.value;
+        const selectedBranch = branchSelect.value;
+        const yearData = attendanceData[selectedBranch]?.[selectedYear];
+
+        if (yearData) {
+          chartTitle.textContent = `Attendance Overview - ${selectedYear} Year - ${branchSelect.options[branchSelect.selectedIndex].text}`;
+          pieChart.data.datasets[0].data = [yearData.present, yearData.absent];
+          pieChart.update();
+        }
+      }
+
+      yearSelect.addEventListener("change", updateChart);
+      branchSelect.addEventListener("change", updateChart);
+
+      // Display individual student attendance
+      searchStudentBtn.addEventListener("click", () => {
+        const selectedYear = parseInt(yearSelect.value);
+        const selectedBranch = branchSelect.value;
+        const studentId = studentIdInput.value.trim();
+
+        const branchData = studentData[selectedBranch];
+        const yearData = branchData ? branchData[selectedYear] : [];
+
+        const student = yearData.find((s) => s.id === studentId);
+
+        if (student) {
+          studentDetails.innerHTML = `
+            <strong>Student Name:</strong> ${student.name}<br>
+            <strong>Present:</strong> ${student.present} days<br>
+            <strong>Absent:</strong> ${student.absent} days<br>
+            <strong>Total Classes:</strong> ${
+              student.present + student.absent
+            } days
+          `;
+          studentAttendanceSection.style.display = "block";
+        } else {
+          studentDetails.innerHTML = `<strong>No student found with ID ${studentId} for ${selectedBranch} - Year ${selectedYear}</strong>`;
+          studentAttendanceSection.style.display = "block";
+        }
+      });
+    </script>
+  </body>
+</html>

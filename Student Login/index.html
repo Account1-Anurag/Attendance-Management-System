@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="profile-image"></div>
+                <h2>Anurag Kumar</h2>
+                <p>ID: 0902cs221015</p>
+            </div>
+            <div class="attendance-summary">
+                <h3>Total Present: 100</h3>
+                <h3>Attendance: 100%</h3>
+            </div>
+            <button class="sem-attendance-btn">Sem Attendance</button>
+            <button class="logout-btn">Log Out</button>
+        </aside>
+        <main class="content">
+            <h1>Attendance</h1>
+            <div class="filters">
+                <div class="date-filter">
+                    <label>Select Date</label>
+                    <select id="date-option-select">
+                        <option value="" disabled selected>Select Option</option>
+                        <option value="single">Single Date</option>
+                        <option value="range">Date Range</option>
+                    </select>
+                    <input type="date" class="date-input single-date" style="display: none;">
+                    <input type="date" class="date-input range-start" style="display: none;">
+                    <input type="date" class="date-input range-end" style="display: none;">
+                </div>
+                <div class="status-filter">
+                    <label>Status</label>
+                    <select id="attendance-filter">
+                        <option value="all">All</option>
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                    </select>
+                </div>
+            </div>
+            <div id="student-classes" class="attendance-list"></div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

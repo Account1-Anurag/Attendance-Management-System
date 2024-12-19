@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mid-Semester Marks Report Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+      }
+      body {
+        background: #f7f9fc;
+        color: #333;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4a4a4a;
+      }
+      button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Mid-Semester Marks Report Generator</h1>
+      <button onclick="generateAllReports()">Download All Reports</button>
+    </div>
+
+    <script>
+      const { jsPDF } = window.jspdf;
+      const { autoTable } = window.jspdf.autotable;
+
+      // Dummy data for mid-semester marks
+      const marksData = {
+        1: {
+          A: [
+            { id: "0902CS241001", name: "Student 1", marks: 45 },
+            { id: "0902CS241002", name: "Student 2", marks: 50 },
+          ],
+          B: [
+            { id: "0902IT241003", name: "Student 3", marks: 40 },
+            { id: "0902IT241004", name: "Student 4", marks: 47 },
+          ],
+        },
+        2: {
+          A: [
+            { id: "0902CS231001", name: "Student 5", marks: 42 },
+            { id: "0902CS231002", name: "Student 6", marks: 49 },
+          ],
+          B: [
+            { id: "0902IT231003", name: "Student 7", marks: 43 },
+            { id: "0902IT231004", name: "Student 8", marks: 44 },
+          ],
+        },
+        3: {
+          A: [
+            { id: "0902CS221001", name: "Student 9", marks: 48 },
+            { id: "0902CS221002", name: "Student 10", marks: 46 },
+          ],
+          B: [
+            { id: "0902IT221003", name: "Student 11", marks: 50 },
+            { id: "0902IT221004", name: "Student 12", marks: 41 },
+          ],
+        },
+        4: {
+          A: [
+            { id: "0902CS211001", name: "Student 13", marks: 39 },
+            { id: "0902CS211002", name: "Student 14", marks: 47 },
+          ],
+          B: [
+            { id: "0902IT211003", name: "Student 15", marks: 44 },
+            { id: "0902IT211004", name: "Student 16", marks: 48 },
+          ],
+        },
+      };
+
+      // Function to generate a single PDF for a class and section
+      function generatePDF(year, section) {
+        const data = marksData[year]?.[section];
+
+        if (!data || data.length === 0) {
+          console.error(`No data found for Year ${year}, Section ${section}`);
+          return;
+        }
+
+        const doc = new jsPDF();
+        doc.text(`Mid-Semester Marks Report - Year ${year}, Section ${section}`, 14, 20);
+        autoTable(doc, {
+          head: [["ID", "Name", "Marks"]],
+          body: data.map((student) => [student.id, student.name, student.marks]),
+          startY: 30,
+        });
+
+        doc.save(`Midsem_Year${year}_Section${section}.pdf`);
+      }
+
+      // Function to generate PDFs for all branches and sections
+      function generateAllReports() {
+        const years = Object.keys(marksData);
+        const sections = ["A", "B"];
+
+        years.forEach((year) => {
+          sections.forEach((section) => {
+            generatePDF(year, section);
+          });
+        });
+
+        alert("All reports have been downloaded!");
+      }
+    </script>
+  </body>
+</html>

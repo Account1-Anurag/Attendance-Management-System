@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Teacher Panel</h2>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Upload Mid-Sem Marks</a></li>
+            <li><a href="#">View Attendance</a></li>
+            <li><a href="#">Announcements</a></li>
+            
+            <li><a href="#">Switch Account</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Welcome, Teacher</h1>
+            <p>Manage attendance and mid-semester marks efficiently</p>
+        </header>
+
+        <!-- Upload Mid-Sem Marks Section -->
+        <section class="upload-section">
+            <h2>Upload Mid-Sem Marks</h2>
+            <form id="uploadForm">
+                <label for="file">Select File:</label>
+                <input type="file" id="file" accept=".csv, .xlsx">
+                <button type="submit">Upload</button>
+            </form>
+        </section>
+
+        <!-- View Attendance Section -->
+        <section class="attendance-summary">
+            <h2>Attendance Overview</h2>
+            <table>
+                <tr>
+                    <th>Class</th>
+                    <th>Total Students</th>
+                    <th>Present (%)</th>
+                    <th>Absent (%)</th>
+                </tr>
+                <tr>
+                    <td>Class A</td>
+                    <td>40</td>
+                    <td>95%</td>
+                    <td>5%</td>
+                </tr>
+                <tr>
+                    <td>Class B</td>
+                    <td>35</td>
+                    <td>90%</td>
+                    <td>10%</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Announcements Section -->
+        <section class="announcements">
+            <h2>Class Announcements</h2>
+            <textarea placeholder="Write announcement..."></textarea>
+            <button id="sendAnnouncement">Send</button>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

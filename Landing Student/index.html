@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="first">
+            <div class="image-sec"></div>
+            <div class="name">
+                <h2>Anurag Kumar</h2>
+                <p>0902cs221015</p>
+            </div>
+            <hr style="border: 1px solid grey; width: 70%; margin: 20px auto;">
+            <div class="dash-present">
+                <h3>Total present: 100</h3>
+                <h3>Total Percentage: 100%</h3>
+            </div>
+            <div class="sem-att">
+                <h3>Sem-Attendance</h3>
+            </div>
+            <div class="logout">
+                <h2>Log-Out</h2>
+            </div>
+        </div>
+        <div class="second">
+            <div class="h1para">
+                <h1>Attendance</h1>
+            </div>
+            <div class="Att">
+                <div class="nav">
+                    <div class="date">
+                        <h2>Select Date</h2>
+                        <div class="date-controls">
+                            <select id="date-option-select">
+                                <option value="" disabled selected>Select Date Option</option>
+                                <option value="single">Single Date</option>
+                                <option value="range">Date Range</option>
+                            </select>
+                            <input type="date" class="date-input single-date" style="display: none;">
+                            <input type="date" class="date-input range-start" style="display: none;" placeholder="Start Date">
+                            <input type="date" class="date-input range-end" style="display: none;" placeholder="End Date">
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <select id="attendance-filter">
+                            <option value="all">All</option>
+                            <option value="present">Present</option>
+                            <option value="absent">Absent</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="student-classes" class="students">
+                    <!-- Demo data will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

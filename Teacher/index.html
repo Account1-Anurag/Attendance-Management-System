@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #B5A6E3;
+            padding: 20px;
+        }
+        .sidebar-item {
+            margin-bottom: 15px;
+        }
+        .sidebar-item > div {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar-item > div .material-icons {
+            margin-right: 10px;
+        }
+        .sidebar-subitem {
+            padding-left: 34px;
+            font-size: 0.9em;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Ensure left alignment */
+        }
+        .sidebar-subitem div {
+            margin-bottom: 5px;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            background-color: #ccc;
+            margin-right: 15px;
+        }
+        .switch-account {
+            background-color: #ccc;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .attendance-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background-color: #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            width: 30%;
+        }
+        .send-alert {
+            background-color: #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .send-alert-content {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        select, input, button {
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        select {
+            background-color: #B5A6E3;
+        }
+        input {
+            flex: 1;
+        }
+        .send-btn {
+            background-color: #ff4757;
+            color: white;
+            cursor: pointer;
+        }
+        .alert-btn {
+            background-color: #B5A6E3;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .alert-output {
+            margin-top: 15px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            color: #333;
+        }
+        .tdnone{
+            text-decoration: none;
+            color: black;
+        }
+        .tdnone:hover{
+            color: white;
+            transform: scale(1.1);
+            opacity: 60%;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="sidebar-item">
+        <div><span class="material-icons">home</span>Home</div>
+      </div>
+      <div class="sidebar-item">
+        <div><span class="material-icons">upload</span>Upload</div>
+        <div class="sidebar-subitem">
+          <a class="tdnone" href="#"><div>Attendance</div></a>
+          <a class="tdnone" href="#"><div>Mid-Sem Marks</div></a>
+          <a class="tdnone" href="#"><div>Notes</div></a>
+          <a class="tdnone" href="#"><div>Assignment</div></a>
+        </div>
+      </div>
+      <div class="sidebar-item">
+        <div><span class="material-icons">visibility</span>Review</div>
+        <div class="sidebar-subitem">
+          <a class="tdnone" href="#"><div>Attendance</div></a>
+          <a class="tdnone" href="#"><div>Mid-Sem Marks</div></a>
+          <a class="tdnone" href="#"><div>Notes</div></a>
+          <a class="tdnone" href="#"><div>Assignment</div></a>
+        </div>
+      </div>
+      <div class="sidebar-item">
+        <div><span class="material-icons">quiz</span>Organise Quiz</div>
+        <div class="sidebar-subitem">
+          <a class="tdnone" href="#"><div>Create Quiz</div></a>
+          <a class="tdnone" href="#"><div>View Results</div></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <div class="profile">
+          <div class="profile-image"></div>
+          <div>
+            <h1>Dr. Jagdish Makhijani</h1>
+            <p>Computer Science & Engineering</p>
+          </div>
+        </div>
+        <a href="#">
+          <button class="switch-account">Switch Account</button>
+        </a>
+      </div>
+
+      <h2>Attendance Statistics</h2>
+      <div class="attendance-stats">
+        <div class="stat-box">
+          <h3>Attendance Overview</h3>
+        </div>
+        <div class="stat-box">
+          <h3>Attendance Edit</h3>
+        </div>
+        <div class="stat-box">
+          <h3>Attendance Report</h3>
+        </div>
+      </div>
+
+      <div class="send-alert">
+        <h2>Send Alert</h2>
+        <div class="send-alert-content">
+          <select id="alert-target">
+            <option>All</option>
+            <option>Teacher</option>
+            <option>Student</option>
+          </select>
+          <input id="alert-message" type="text" placeholder="Send Message" />
+          <button class="send-btn" onclick="sendAlert()">Send</button>
+        </div>
+        <div id="alert-output" class="alert-output"></div>
+      </div>
+    </div>
+
+    <script>
+      function sendAlert() {
+        const target = document.getElementById("alert-target").value;
+        const message = document.getElementById("alert-message").value;
+        const output = document.getElementById("alert-output");
+        if (message.trim()) {
+          output.innerHTML = `<strong>To ${target}:</strong> ${message}`;
+        } else {
+          output.innerHTML = `<span style='color: red;'>Please enter a message.</span>`;
+        }
+      }
+    </script>
+  </body>
+</html>

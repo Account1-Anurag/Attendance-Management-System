@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Report Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+      }
+      body {
+        background: #e9ecef;
+        color: #333;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4a4a4a;
+      }
+      .dropdown-container {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f9f9f9;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button {
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Attendance Report Generator</h1>
+
+      <!-- Year and Branch Selection -->
+      <div class="dropdown-container">
+        <label for="yearSelect"><strong>Select Year:</strong></label>
+        <select id="yearSelect">
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+
+        <label for="branchSelect"><strong>Select Branch:</strong></label>
+        <select id="branchSelect">
+          <option value="CS">Computer Science</option>
+          <option value="IT">Information Technology</option>
+          <option value="EC">Electronics & Communications</option>
+          <option value="AU">Automobile Engineering</option>
+          <option value="EE">Electrical Engineering</option>
+          <option value="ME">Mechanical Engineering</option>
+        </select>
+
+        <button onclick="generatePDF()">Download Attendance Report</button>
+      </div>
+    </div>
+
+    <script>
+      const { jsPDF } = window.jspdf;
+
+      // Dummy data for attendance
+      const attendanceData = {
+        1: {
+          CS: [
+            { id: "0902CS241001", name: "Student 1", present: 75, absent: 5 },
+            { id: "0902CS241002", name: "Student 2", present: 80, absent: 3 },
+            { id: "0902CS241003", name: "Student 3", present: 70, absent: 13 },
+            { id: "0902CS241004", name: "Student 4", present: 50, absent: 13 },
+          ],
+          IT: [
+            { id: "0902IT241001", name: "Student 3", present: 78, absent: 7 },
+            { id: "0902IT241002", name: "Student 4", present: 85, absent: 4 },
+          ],
+        },
+        2: {
+          CS: [
+            { id: "0902CS231001", name: "Student 5", present: 90, absent: 2 },
+            { id: "0902CS231002", name: "Student 6", present: 88, absent: 3 },
+          ],
+          IT: [
+            { id: "0902IT231001", name: "Student 7", present: 82, absent: 6 },
+            { id: "0902IT231002", name: "Student 8", present: 84, absent: 5 },
+          ],
+        },
+      };
+
+      function generatePDF() {
+        const year = document.getElementById("yearSelect").value;
+        const branch = document.getElementById("branchSelect").value;
+
+        if (attendanceData[year] && attendanceData[year][branch]) {
+          const students = attendanceData[year][branch];
+          const doc = new jsPDF();
+
+          // Title of the PDF
+          doc.setFontSize(16);
+          doc.text(`Attendance Report for ${branch} - ${year} Year`, 10, 10);
+
+          // Table columns and data
+          const columns = ["Enrollment ID", "Student Name", "Present", "Absent"];
+          const rows = students.map(student => [
+            student.id,
+            student.name,
+            student.present.toString(),
+            student.absent.toString(),
+          ]);
+
+          // Generate table
+          doc.autoTable({
+            head: [columns],
+            body: rows,
+            startY: 20,
+            theme: "grid",
+            headStyles: { fillColor: [0, 123, 255], textColor: [255, 255, 255] },
+            bodyStyles: { fontSize: 10 },
+            styles: { overflow: "linebreak", cellWidth: "auto" },
+          });
+
+          // Save PDF
+          doc.save(`attendance_report_${branch}_${year}.pdf`);
+        } else {
+          alert("No data found for the selected year and branch.");
+        }
+      }
+    </script>
+  </body>
+</html>

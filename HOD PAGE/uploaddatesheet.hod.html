@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Midsem Date Sheet</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+      body {
+        background: linear-gradient(to right, #48cae4, #6c63ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .upload-container {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+        color: #555;
+      }
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+      button {
+        background: #48cae4;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        transition: background 0.3s ease;
+      }
+      button:hover {
+        background: #3398bd;
+      }
+      .success-message {
+        text-align: center;
+        color: green;
+        font-size: 14px;
+        margin-top: 10px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="upload-container">
+      <h1>Upload Midsem Date Sheet</h1>
+      <form id="uploadForm">
+        <label for="deptName">Department</label>
+        <select id="deptName" required>
+          <option value="" disabled selected>Choose Department</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Mechanical Engineering">Mechanical Engineering</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Civil Engineering">Civil Engineering</option>
+        </select>
+
+        <label for="semester">Semester</label>
+        <select id="semester" required>
+          <option value="" disabled selected>Choose Semester</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+
+        <label for="examDate">Midsem Exam Start Date</label>
+        <input type="date" id="examDate" required />
+
+        <label for="uploadFile">Upload Date Sheet</label>
+        <input type="file" id="uploadFile" accept=".pdf, .doc, .docx" required />
+
+        <button type="submit">Upload</button>
+        <p class="success-message" id="successMessage">
+          Midsem Date Sheet uploaded successfully!
+        </p>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById("uploadForm");
+      const successMessage = document.getElementById("successMessage");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        successMessage.style.display = "block";
+        setTimeout(() => {
+          successMessage.style.display = "none";
+          form.reset();
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>
