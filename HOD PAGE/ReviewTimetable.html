@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timetable PDF Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    .no-pdf {
+      color: red;
+    }
+    .has-pdf {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Timetable PDF Management</h1>
+
+    <!-- Select Branch -->
+    <form id="branchForm">
+      <label for="branchSelect">Select Branch:</label>
+      <select id="branchSelect" required>
+        <option value="">-- Select Branch --</option>
+        <option value="CS">Computer Science</option>
+        <option value="IT">Information Technology</option>
+        <option value="EC">Electronics & Communications</option>
+        <option value="AU">Automobile Engineering</option>
+        <option value="EE">Electrical Engineering</option>
+        <option value="ME">Mechanical Engineering</option>
+      </select>
+      <button type="button" onclick="showSemesters()">Show Semesters</button>
+    </form>
+
+    <!-- Semester Table -->
+    <div id="semesterTableContainer" style="display: none;">
+      <h2>Semester Timetables</h2>
+      <table id="semesterTable">
+        <thead>
+          <tr>
+            <th>Semester</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamically filled -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Mock Data: Replace with backend integration
+    const timetableData = {
+      CS: { 1: "cs-sem1.pdf", 2: "cs-sem2.pdf", 3: "", 4: "", 5: "cs-sem5.pdf", 6: "", 7: "", 8: "" },
+      IT: { 1: "it-sem1.pdf", 2: "", 3: "", 4: "it-sem4.pdf", 5: "", 6: "", 7: "", 8: "" },
+      EC: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "ec-sem6.pdf", 7: "", 8: "" },
+      AU: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "au-sem7.pdf", 8: "" },
+      EE: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "ee-sem8.pdf" },
+      ME: { 1: "", 2: "me-sem2.pdf", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "" },
+    };
+
+    // Show Semesters for Selected Branch
+    function showSemesters() {
+      const branch = document.getElementById("branchSelect").value;
+      const tableContainer = document.getElementById("semesterTableContainer");
+      const tableBody = document.querySelector("#semesterTable tbody");
+
+      if (!branch) {
+        alert("Please select a branch.");
+        return;
+      }
+
+      // Clear previous table rows
+      tableBody.innerHTML = "";
+
+      // Fill table with semester data
+      const semesters = timetableData[branch];
+      for (let sem = 1; sem <= 8; sem++) {
+        const row = document.createElement("tr");
+        const pdfName = semesters[sem];
+
+        row.innerHTML = `
+          <td>Semester ${sem}</td>
+          <td class="${pdfName ? "has-pdf" : "no-pdf"}">
+            ${pdfName ? "Uploaded" : "Not Uploaded"}
+          </td>
+          <td>
+            ${pdfName ? `<a href="${pdfName}" target="_blank">Open PDF</a>` : "N/A"}
+          </td>
+        `;
+        tableBody.appendChild(row);
+      }
+
+      tableContainer.style.display = "block";
+    }
+  </script>
+</body>
+</html>

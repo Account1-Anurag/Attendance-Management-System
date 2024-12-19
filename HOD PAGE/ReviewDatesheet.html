@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Sheet Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    .no-pdf {
+      color: red;
+    }
+    .has-pdf {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Date Sheet Management</h1>
+
+    <!-- Select Branch -->
+    <form id="branchForm">
+      <label for="branchSelect">Select Branch:</label>
+      <select id="branchSelect" required>
+        <option value="">-- Select Branch --</option>
+        <option value="CS">Computer Science</option>
+        <option value="IT">Information Technology</option>
+        <option value="EC">Electronics & Communications</option>
+        <option value="AU">Automobile Engineering</option>
+        <option value="EE">Electrical Engineering</option>
+        <option value="ME">Mechanical Engineering</option>
+      </select>
+      <button type="button" onclick="showYears()">Show Years</button>
+    </form>
+
+    <!-- Year Table -->
+    <div id="yearTableContainer" style="display: none;">
+      <h2>Yearly Date Sheets</h2>
+      <table id="yearTable">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamically filled -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Mock Data: Replace with backend integration
+    const dateSheetData = {
+      CS: { 1: "cs-year3.pdf", 2: "cs-year3", 3: "cs-year3.pdf", 4: "" },
+      IT: { 1: "cs-year3.pdf", 2: "cs-year3.pdf", 3: "", 4: "" },
+      EC: { 1: "", 2: "", 3: "cs-year3", 4: "" },
+      AU: { 1: "au-year1.pdf", 2: "", 3: "", 4: "" },
+      EE: { 1: "", 2: "ee-year2.pdf", 3: "cs-year3", 4: "" },
+      ME: { 1: "", 2: "", 3: "cs-year3", 4: "me-year4.pdf" },
+    };
+
+    // Show Years for Selected Branch
+    function showYears() {
+      const branch = document.getElementById("branchSelect").value;
+      const tableContainer = document.getElementById("yearTableContainer");
+      const tableBody = document.querySelector("#yearTable tbody");
+
+      if (!branch) {
+        alert("Please select a branch.");
+        return;
+      }
+
+      // Clear previous table rows
+      tableBody.innerHTML = "";
+
+      // Fill table with year data
+      const years = dateSheetData[branch];
+      for (let year = 1; year <= 4; year++) {
+        const row = document.createElement("tr");
+        const pdfName = years[year];
+
+        row.innerHTML = `
+          <td>${year} Year</td>
+          <td class="${pdfName ? "has-pdf" : "no-pdf"}">
+            ${pdfName ? "Uploaded" : "Not Uploaded"}
+          </td>
+          <td>
+            ${pdfName ? `<a href="${pdfName}" target="_blank">Open PDF</a>` : "N/A"}
+          </td>
+        `;
+        tableBody.appendChild(row);
+      }
+
+      tableContainer.style.display = "block";
+    }
+  </script>
+</body>
+</html>
