@@ -14,7 +14,7 @@
         font-family: "Roboto", sans-serif;
       }
       body {
-        background: #f7f9fc;
+        background: #e9ecef;
         color: #333;
         min-height: 100vh;
         padding: 20px;
@@ -32,9 +32,20 @@
         margin-bottom: 20px;
         color: #4a4a4a;
       }
+      .dropdown-container {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f9f9f9;
+        cursor: pointer;
+        margin-right: 10px;
+      }
       button {
-        display: block;
-        margin: 20px auto;
         padding: 10px 15px;
         font-size: 16px;
         background-color: #007bff;
@@ -51,89 +62,97 @@
   <body>
     <div class="container">
       <h1>Mid-Semester Marks Report Generator</h1>
-      <button onclick="generateAllReports()">Download All Reports</button>
+
+      <!-- Year and Branch Selection -->
+      <div class="dropdown-container">
+        <label for="yearSelect"><strong>Select Year:</strong></label>
+        <select id="yearSelect">
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+
+        <label for="branchSelect"><strong>Select Branch:</strong></label>
+        <select id="branchSelect">
+          <option value="CS">Computer Science</option>
+          <option value="IT">Information Technology</option>
+          <option value="EC">Electronics & Communications</option>
+          <option value="AU">Automobile Engineering</option>
+          <option value="EE">Electrical Engineering</option>
+          <option value="ME">Mechanical Engineering</option>
+        </select>
+
+        <button onclick="generateMarksPDF()">Download Marks Report</button>
+      </div>
     </div>
 
     <script>
       const { jsPDF } = window.jspdf;
-      const { autoTable } = window.jspdf.autotable;
 
       // Dummy data for mid-semester marks
       const marksData = {
         1: {
-          A: [
+          CS: [
             { id: "0902CS241001", name: "Student 1", marks: 45 },
             { id: "0902CS241002", name: "Student 2", marks: 50 },
+            { id: "0902CS241003", name: "Student 3", marks: 38 },
+            { id: "0902CS241004", name: "Student 4", marks: 42 },
           ],
-          B: [
-            { id: "0902IT241003", name: "Student 3", marks: 40 },
-            { id: "0902IT241004", name: "Student 4", marks: 47 },
+          IT: [
+            { id: "0902IT241001", name: "Student 5", marks: 48 },
+            { id: "0902IT241002", name: "Student 6", marks: 40 },
           ],
         },
         2: {
-          A: [
-            { id: "0902CS231001", name: "Student 5", marks: 42 },
-            { id: "0902CS231002", name: "Student 6", marks: 49 },
+          CS: [
+            { id: "0902CS231001", name: "Student 7", marks: 49 },
+            { id: "0902CS231002", name: "Student 8", marks: 44 },
           ],
-          B: [
-            { id: "0902IT231003", name: "Student 7", marks: 43 },
-            { id: "0902IT231004", name: "Student 8", marks: 44 },
-          ],
-        },
-        3: {
-          A: [
-            { id: "0902CS221001", name: "Student 9", marks: 48 },
-            { id: "0902CS221002", name: "Student 10", marks: 46 },
-          ],
-          B: [
-            { id: "0902IT221003", name: "Student 11", marks: 50 },
-            { id: "0902IT221004", name: "Student 12", marks: 41 },
-          ],
-        },
-        4: {
-          A: [
-            { id: "0902CS211001", name: "Student 13", marks: 39 },
-            { id: "0902CS211002", name: "Student 14", marks: 47 },
-          ],
-          B: [
-            { id: "0902IT211003", name: "Student 15", marks: 44 },
-            { id: "0902IT211004", name: "Student 16", marks: 48 },
+          IT: [
+            { id: "0902IT231001", name: "Student 9", marks: 46 },
+            { id: "0902IT231002", name: "Student 10", marks: 50 },
           ],
         },
       };
 
-      // Function to generate a single PDF for a class and section
-      function generatePDF(year, section) {
-        const data = marksData[year]?.[section];
+      // Generate PDF for mid-semester marks
+      function generateMarksPDF() {
+        const year = document.getElementById("yearSelect").value;
+        const branch = document.getElementById("branchSelect").value;
 
-        if (!data || data.length === 0) {
-          console.error(`No data found for Year ${year}, Section ${section}`);
-          return;
-        }
+        if (marksData[year] && marksData[year][branch]) {
+          const students = marksData[year][branch];
+          const doc = new jsPDF();
 
-        const doc = new jsPDF();
-        doc.text(`Mid-Semester Marks Report - Year ${year}, Section ${section}`, 14, 20);
-        autoTable(doc, {
-          head: [["ID", "Name", "Marks"]],
-          body: data.map((student) => [student.id, student.name, student.marks]),
-          startY: 30,
-        });
+          // Title of the PDF
+          doc.setFontSize(16);
+          doc.text(`Mid-Semester Marks Report for ${branch} - ${year} Year`, 10, 10);
 
-        doc.save(`Midsem_Year${year}_Section${section}.pdf`);
-      }
+          // Table columns and data
+          const columns = ["Enrollment ID", "Student Name", "Marks"];
+          const rows = students.map(student => [
+            student.id,
+            student.name,
+            student.marks.toString(),
+          ]);
 
-      // Function to generate PDFs for all branches and sections
-      function generateAllReports() {
-        const years = Object.keys(marksData);
-        const sections = ["A", "B"];
-
-        years.forEach((year) => {
-          sections.forEach((section) => {
-            generatePDF(year, section);
+          // Generate table
+          doc.autoTable({
+            head: [columns],
+            body: rows,
+            startY: 20,
+            theme: "grid",
+            headStyles: { fillColor: [0, 123, 255], textColor: [255, 255, 255] },
+            bodyStyles: { fontSize: 10 },
+            styles: { overflow: "linebreak", cellWidth: "auto" },
           });
-        });
 
-        alert("All reports have been downloaded!");
+          // Save PDF
+          doc.save(`midsem_marks_${branch}_${year}.pdf`);
+        } else {
+          alert("No data found for the selected year and branch.");
+        }
       }
     </script>
   </body>

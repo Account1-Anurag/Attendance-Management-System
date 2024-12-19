@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+    .success {
+      color: green;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Teacher Management</h1>
+
+    <!-- Form to Add a Teacher -->
+    <form id="addTeacherForm">
+      <label for="teacherName">Teacher Name:</label>
+      <input type="text" id="teacherName" placeholder="Enter teacher name" required>
+
+      <label for="teacherEmail">Teacher Email:</label>
+      <input type="email" id="teacherEmail" placeholder="Enter teacher email" required>
+
+      <label for="subjects">Assign Subject(s):</label>
+      <input type="text" id="subjects" placeholder="E.g., CS501, CS502" required>
+
+      <label for="classes">Assign Class(es):</label>
+      <input type="text" id="classes" placeholder="E.g., 1st Year CS, 2nd Year IT" required>
+
+      <button type="button" onclick="addTeacher()">Add Teacher</button>
+    </form>
+
+    <!-- Success/Error Message -->
+    <p id="message" class=""></p>
+
+    <!-- List of Assigned Teachers -->
+    <h2>Assigned Teachers</h2>
+    <table id="teachersTable">
+      <thead>
+        <tr>
+          <th>Teacher Name</th>
+          <th>Email</th>
+          <th>Subjects</th>
+          <th>Classes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamically filled -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let teachers = []; // Store teacher details
+
+    // Function to Add a Teacher
+    function addTeacher() {
+      const name = document.getElementById("teacherName").value;
+      const email = document.getElementById("teacherEmail").value;
+      const subjects = document.getElementById("subjects").value;
+      const classes = document.getElementById("classes").value;
+      const message = document.getElementById("message");
+
+      // Validation
+      if (!name || !email || !subjects || !classes) {
+        message.textContent = "All fields are required!";
+        message.className = "error";
+        return;
+      }
+
+      // Create teacher object
+      const teacher = {
+        id: Date.now(),
+        name,
+        email,
+        subjects,
+        classes,
+      };
+
+      teachers.push(teacher); // Add teacher to the list
+      message.textContent = "Teacher added successfully!";
+      message.className = "success";
+      updateTeachersTable();
+      clearForm();
+    }
+
+    // Function to Update the Teachers Table
+    function updateTeachersTable() {
+      const tableBody = document.querySelector("#teachersTable tbody");
+      tableBody.innerHTML = ""; // Clear existing rows
+
+      teachers.forEach(teacher => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${teacher.name}</td>
+          <td>${teacher.email}</td>
+          <td>${teacher.subjects}</td>
+          <td>${teacher.classes}</td>
+          <td>
+            <button onclick="removeTeacher(${teacher.id})">Remove</button>
+          </td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Function to Clear Form Fields
+    function clearForm() {
+      document.getElementById("teacherName").value = "";
+      document.getElementById("teacherEmail").value = "";
+      document.getElementById("subjects").value = "";
+      document.getElementById("classes").value = "";
+    }
+
+    // Function to Remove a Teacher
+    function removeTeacher(id) {
+      teachers = teachers.filter(teacher => teacher.id !== id);
+      updateTeachersTable();
+    }
+  </script>
+</body>
+</html>

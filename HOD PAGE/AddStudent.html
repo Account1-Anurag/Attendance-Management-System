@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+    .success {
+      color: green;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Student Management</h1>
+
+    <!-- Filter by Branch and Year -->
+    <form id="filterForm">
+      <label for="branchSelect">Select Branch:</label>
+      <select id="branchSelect" required>
+        <option value="">-- Select Branch --</option>
+        <option value="CS">Computer Science</option>
+        <option value="IT">Information Technology</option>
+        <option value="EC">Electronics & Communications</option>
+        <option value="AU">Automobile Engineering</option>
+        <option value="EE">Electrical Engineering</option>
+        <option value="ME">Mechanical Engineering</option>
+      </select>
+
+      <label for="yearSelect">Select Year:</label>
+      <select id="yearSelect" required>
+        <option value="">-- Select Year --</option>
+        <option value="1">1st Year</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+      </select>
+
+      <button type="button" onclick="filterStudents()">Filter Students</button>
+    </form>
+
+    <!-- Add a New Student -->
+    <form id="addStudentForm" style="display: none;">
+      <label for="studentName">Student Name:</label>
+      <input type="text" id="studentName" placeholder="Enter student name" required>
+
+      <label for="enrollmentId">Enrollment ID:</label>
+      <input type="text" id="enrollmentId" placeholder="Enter enrollment ID" required>
+
+      <button type="button" onclick="addStudent()">Add Student</button>
+    </form>
+
+    <!-- Success/Error Message -->
+    <p id="message" class=""></p>
+
+    <!-- List of Students -->
+    <h2>Student List</h2>
+    <table id="studentsTable">
+      <thead>
+        <tr>
+          <th>Enrollment ID</th>
+          <th>Student Name</th>
+          <th>Branch</th>
+          <th>Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamically filled -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let students = []; // Store student details
+
+    // Function to Filter Students
+    function filterStudents() {
+      const branch = document.getElementById("branchSelect").value;
+      const year = document.getElementById("yearSelect").value;
+      const message = document.getElementById("message");
+
+      if (!branch || !year) {
+        message.textContent = "Please select both branch and year!";
+        message.className = "error";
+        return;
+      }
+
+      // Show add student form after filtering
+      document.getElementById("addStudentForm").style.display = "block";
+      message.textContent = `Displaying students for ${branch} - ${year} Year.`;
+      message.className = "success";
+
+      // Filter and update table
+      updateStudentsTable(branch, year);
+    }
+
+    // Function to Add a Student
+    function addStudent() {
+      const name = document.getElementById("studentName").value;
+      const enrollmentId = document.getElementById("enrollmentId").value;
+      const branch = document.getElementById("branchSelect").value;
+      const year = document.getElementById("yearSelect").value;
+      const message = document.getElementById("message");
+
+      // Validation
+      if (!name || !enrollmentId) {
+        message.textContent = "Please fill in all fields!";
+        message.className = "error";
+        return;
+      }
+
+      // Create student object
+      const student = {
+        id: enrollmentId,
+        name,
+        branch,
+        year,
+      };
+
+      students.push(student); // Add student to the list
+      message.textContent = "Student added successfully!";
+      message.className = "success";
+      updateStudentsTable(branch, year);
+      clearForm();
+    }
+
+    // Function to Update the Students Table
+    function updateStudentsTable(branch, year) {
+      const tableBody = document.querySelector("#studentsTable tbody");
+      tableBody.innerHTML = ""; // Clear existing rows
+
+      // Filter students by branch and year
+      const filteredStudents = students.filter(
+        student => student.branch === branch && student.year === year
+      );
+
+      filteredStudents.forEach(student => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${student.id}</td>
+          <td>${student.name}</td>
+          <td>${student.branch}</td>
+          <td>${student.year}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Function to Clear Form Fields
+    function clearForm() {
+      document.getElementById("studentName").value = "";
+      document.getElementById("enrollmentId").value = "";
+    }
+  </script>
+</body>
+</html>
