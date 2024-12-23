@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      font-family: Arial, sans-serif;
+    }
+    .dashboard {
+      width: 20%;
+      background: #6b58cc;
+      height: 100vh;
+      color: white;
+      padding: 20px;
+      position: fixed;
+    }
+    .dashboard h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      text-align: center;
+    }
+    .dashboard ul {
+      list-style: none;
+      padding: 0;
+    }
+    .dashboard ul li {
+      margin: 15px 0;
+      font-size: 18px;
+    }
+    .dashboard ul li a {
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+    .dashboard ul li a:hover {
+      color: #ddd;
+    }
+    .content {
+      margin-left: 22%;
+      padding: 20px;
+      width: 75%;
+    }
+    h1 {
+      font-size: 26px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    form label, form input, form select, form textarea, form button {
+      display: block;
+      margin-bottom: 15px;
+      width: 100%;
+    }
+    form input, form select, form textarea {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    form button {
+      padding: 10px;
+      background-color: #6b58cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    form button:hover {
+      background-color: #917cfb;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Teacher Dashboard</h2>
+    <ul>
+      <li><a href="upload_midsem.html">Upload Mid-Sem Marks</a></li>
+      <li><a href="upload_notes.html">Upload Notes/Assignments</a></li>
+    </ul>
+  </div>
+  <div class="content">
+    <h1>Upload Notes/Assignments</h1>
+    <form id="notesForm">
+      <label for="semester">Select Semester</label>
+      <select id="semester" required>
+        <option value="">-- Select Semester --</option>
+        <option value="1">Semester 1</option>
+        <option value="2">Semester 2</option>
+        <option value="3">Semester 3</option>
+        <option value="4">Semester 4</option>
+      </select>
+  
+      <label for="subject">Select Subject</label>
+      <select id="subject" required>
+        <option value="">-- Select Subject --</option>
+        <option value="CS101">CS101 - Programming Basics</option>
+        <option value="CS102">CS102 - Mathematics I</option>
+        <option value="CS201">CS201 - Data Structures</option>
+        <option value="CS301">CS301 - Algorithms</option>
+      </select>
+  
+      <label for="notesFile">Upload Notes/Assignments</label>
+      <input type="file" id="notesFile" accept=".pdf,.doc,.docx" required />
+  
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+  
+</body>
+</html>

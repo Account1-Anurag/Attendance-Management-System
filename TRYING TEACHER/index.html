@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+    }
+    .container {
+      display: flex;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: #917cfb;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .sidebar a:hover {
+      background-color: #6b58cc;
+    }
+    .sidebar .submenu a {
+      margin-left: 20px;
+    }
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      width: calc(100% - 250px);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ddd;
+      padding: 10px 20px;
+      border-radius: 5px;
+    }
+    .header h1 {
+      margin: 0;
+    }
+    .header button {
+      background-color: #6b58cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .header button:hover {
+      background-color: #917cfb;
+    }
+    /* Content Sections */
+    .section {
+      margin: 20px 0;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .section h2 {
+      margin: 0 0 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px;
+    }
+    th {
+      background-color: #6b58cc;
+      color: white;
+    }
+    button {
+      background-color: #6b58cc;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #917cfb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Teacher Dashboard</h2>
+      <a href="#">Home</a>
+      <a href="#">Upload</a>
+      <div class="submenu">
+        <a href="UploadAttendance.html">Attendance</a>
+        <a href="UploadMidsem.html">Midsem Marks</a>
+        <a href="UploadNotes.html">Notes/Assignment</a>
+      </div>
+      <a href="#">Review</a>
+      <div class="submenu">
+        <a href="#">Attendance</a>
+        <a href="#">Midsem Marks</a>
+      </div>
+      <a href="#">Reports</a>
+      <div class="submenu">
+        <a href="DownloadAttendance.html">Attendance</a>
+        <a href="DownloadMidsem.html">Midsem Marks</a>
+      </div>
+      <a href="#">Notifications</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>Welcome, [Teacher Name]</h1>
+        <button>Switch Account</button>
+      </div>
+
+      <div class="section">
+        <h2>Upload Attendance</h2>
+        <form id="uploadAttendanceForm">
+          <label for="branch">Branch:</label>
+          <select id="branch" required>
+            <option value="">Select Branch</option>
+            <option value="CS">Computer Science</option>
+            <option value="IT">Information Technology</option>
+            <option value="ECE">Electronics</option>
+          </select><br><br>
+          <label for="file">Upload Attendance File:</label>
+          <input type="file" id="file" required><br><br>
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+
+      <div class="section">
+        <h2>Notice Board</h2>
+        <ul>
+          <li>Midsem Marks submission due next week.</li>
+          <li>Assignments deadline extended.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Recent Activities</h2>
+        <ul>
+          <li>Attendance for CS101 has been successfully uploaded.</li>
+          <li>Reviewed Midsem Marks for CS102.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mock function for attendance upload
+    document.getElementById("uploadAttendanceForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const branch = document.getElementById("branch").value;
+      const file = document.getElementById("file").files[0];
+      if (branch && file) {
+        alert(`Attendance for branch ${branch} uploaded successfully!`);
+      } else {
+        alert("Please select a branch and upload a file.");
+      }
+    });
+  </script>
+</body>
+</html>
